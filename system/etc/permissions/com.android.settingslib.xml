@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<permissions>
+    <library name="com.android.settingslib"
+        file="/system/framework/com.android.settingslib.jar"/>
+</permissions>
+
