@@ -1,4 +1,3 @@
-## Name
 # Dolby Atmos OnePlus 8 Visible Magisk Module
 
 ## DISCLAIMER
