@@ -16,7 +16,7 @@
 - Android 9 and up
 - Architecture 64 bit
 - Magisk Installed
-- Recommended to use Magisk Delta for the systemless early init mount manifest.xml https://t.me/androidryukimodsdiscussions/100091
+- Recommended to use Magisk Delta for systemless early init mount manifest.xml if your ROM is Read-Only https://t.me/androidryukimodsdiscussions/100091
 
 ## WARNING!!!
 - Possibility of bootloop or even softbrick or a service failure on Read-Only ROM if you don't use Magisk Delta.
@@ -25,7 +25,7 @@
 - Recommended to use Magisk Delta https://t.me/androidryukimodsdiscussions/100091
 - Remove any other Dolby module with different name (no need to remove if it's the same name)
 - Reboot
-- Install this module https://www.pling.com/p/1531593/ via Magisk Manager or Recovery
+- Install this module https://www.pling.com/p/1461991/ via Magisk Manager or Recovery
 - Install AML Magisk Module https://zackptg5.com/android.php#aml only if using any other audio mod module
 - Reboot
 
@@ -45,6 +45,7 @@
 - Android 10 CrDroid ROM
 - Android 11 DotOS ROM
 - Android 12 AncientOS ROM
+- Android 12.1 Nusantara ROM
 
 ## Credits and contributors
 - https://t.me/viperatmos
