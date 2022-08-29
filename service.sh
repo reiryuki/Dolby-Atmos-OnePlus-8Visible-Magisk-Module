@@ -127,7 +127,10 @@ if pm list packages | grep $PKG ; then
   if [ "$API" -ge 30 ]; then
     appops set $PKG AUTO_REVOKE_PERMISSIONS_IF_UNUSED ignore
   fi
+  OBM=`settings get system oem_black_mode`
+  if [ "$OBM" == null ] || [ "$OBM" == 0 ]; then
+    settings put system oem_black_mode 1
+  fi
 fi
-
 
 
