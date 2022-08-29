@@ -32,8 +32,7 @@ fi
 NUM=28
 if [ "$API" -lt $NUM ]; then
   ui_print "! Unsupported SDK $API. You have to upgrade your"
-  ui_print "  Android version at least SDK API $NUM to use this"
-  ui_print "  module."
+  ui_print "  Android version at least SDK API $NUM to use this module."
   abort
 else
   ui_print "- SDK $API"
@@ -58,7 +57,7 @@ mv -f $MODPATH/aml.sh $MODPATH/.aml.sh
 
 # mod ui
 if [ "`grep_prop mod.ui $OPTIONALS`" == 1 ]; then
-  APP=DaxUI
+  APP=OPSoundTuner
   FILE=/sdcard/$APP.apk
   DIR=`find $MODPATH/system -type d -name $APP`
   ui_print "- Using modified UI apk..."
@@ -76,7 +75,10 @@ fi
 
 # cleaning
 ui_print "- Cleaning..."
-PKG="com.dolby.daxappui com.dolby.daxservice"
+PKG="com.oneplus.sound.tuner
+     com.oneplus.config
+     com.dolby.daxappui
+     com.dolby.daxservice"
 if [ "$BOOTMODE" == true ]; then
   for PKGS in $PKG; do
     RES=`pm uninstall $PKGS`
@@ -159,6 +161,49 @@ elif [ -d $DIR ] && ! grep -Eq "$MODNAME" $FILE; then
   ui_print " "
 fi
 
+# check
+NAME=_ZN7android23sp_report_stack_pointerEv
+if [ "$BOOTMODE" == true ]; then
+  DIR=`realpath $MAGISKTMP/mirror/vendor`
+else
+  DIR=`realpath /vendor`
+fi
+ui_print "- Checking"
+ui_print "$NAME"
+ui_print "  function"
+ui_print "  Please wait..."
+if ! grep -Eq $NAME `find $DIR/lib*/hw -type f -name *audio*.so`\
+|| [ "`grep_prop dolby.10 $OPTIONALS`" == 1 ]; then
+  ui_print "  Using legacy libraries"
+  if [ "$API" -ge 30 ]; then
+    rm -rf $MODPATH/system_10/framework
+  fi
+  cp -rf $MODPATH/system_10/* $MODPATH/system
+  sed -i 's/#10//g' $MODPATH/service.sh
+else
+  sed -i 's/#11//g' $MODPATH/service.sh
+fi
+rm -rf $MODPATH/system_10
+ui_print " "
+#NAME=_ZN7android4base15WriteStringToFdERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEENS0_11borrowed_fdE
+#NAME=_ZN7android22GraphicBufferAllocator17allocateRawHandleEjjijyPPK13native_handlePjNSt3__112basic_stringIcNS6_11char_traitsIcEENS6_9allocatorIcEEEE
+NAME=_ZN7android8hardware23getOrCreateCachedBinderEPNS_4hidl4base4V1_05IBaseE
+if [ "$BOOTMODE" == true ]; then
+  DIR=`realpath $MAGISKTMP/mirror/system`
+else
+  DIR=`realpath /system`
+fi
+ui_print "- Checking"
+ui_print "$NAME"
+ui_print "  function"
+ui_print "  Please wait..."
+if ! grep -Eq $NAME `find $DIR/lib64 -type f -name *audio*.so`; then
+  ui_print "  ! Function not found."
+  ui_print "  Unsupported ROM."
+  abort
+fi
+ui_print " "
+
 # function
 permissive() {
 SELINUX=`getenforce`
@@ -200,12 +245,12 @@ if [ -f $FILE ]; then
     <hal format="hidl">\
         <name>vendor.dolby.hardware.dms</name>\
         <transport>hwbinder</transport>\
-        <version>1.0</version>\
+        <version>2.0</version>\
         <interface>\
             <name>IDms</name>\
             <instance>default</instance>\
         </interface>\
-        <fqname>@1.0::IDms/default</fqname>\
+        <fqname>@2.0::IDms/default</fqname>\
     </hal>' $FILE
     ui_print " "
   else
@@ -395,7 +440,7 @@ if [ "`grep_prop dolby.skip.early $OPTIONALS`" != 1 ]\
     if [ ! -f $DES ]; then
       cp -f $SRC $DIR
     fi
-    if ! grep -A2 vendor.dolby.hardware.dms $DES | grep -Eq 1.0; then
+    if ! grep -A2 vendor.dolby.hardware.dms $DES | grep -Eq 2.0; then
       ui_print "- Patching"
       ui_print "$SRC"
       ui_print "  systemlessly using early init mount..."
@@ -403,12 +448,12 @@ if [ "`grep_prop dolby.skip.early $OPTIONALS`" != 1 ]\
     <hal format="hidl">\
         <name>vendor.dolby.hardware.dms</name>\
         <transport>hwbinder</transport>\
-        <version>1.0</version>\
+        <version>2.0</version>\
         <interface>\
             <name>IDms</name>\
             <instance>default</instance>\
         </interface>\
-        <fqname>@1.0::IDms/default</fqname>\
+        <fqname>@2.0::IDms/default</fqname>\
     </hal>' $DES
       ui_print " "
     fi
@@ -491,36 +536,36 @@ FILE="$MAGISKTMP/mirror/*/etc/vintf/manifest.xml
       $MAGISKTMP/mirror/*/*/etc/vintf/manifest/*.xml
       /*/etc/vintf/manifest/*.xml /*/*/etc/vintf/manifest/*.xml"
 if [ "`grep_prop dolby.skip.vendor $OPTIONALS`" != 1 ]\
-&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 1.0; then
+&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 2.0; then
   FILE=$MAGISKTMP/mirror/vendor/etc/vintf/manifest.xml
   patch_manifest
 fi
 if [ "`grep_prop dolby.skip.system $OPTIONALS`" != 1 ]\
-&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 1.0; then
+&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 2.0; then
   FILE=$MAGISKTMP/mirror/system/etc/vintf/manifest.xml
   patch_manifest
 fi
 if [ "`grep_prop dolby.skip.system_ext $OPTIONALS`" != 1 ]\
-&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 1.0; then
+&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 2.0; then
   FILE=$MAGISKTMP/mirror/system_ext/etc/vintf/manifest.xml
   patch_manifest
 fi
 if [ "`grep_prop dolby.skip.vendor $OPTIONALS`" != 1 ]\
-&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 1.0; then
+&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 2.0; then
   FILE=/vendor/etc/vintf/manifest.xml
   patch_manifest
 fi
 if [ "`grep_prop dolby.skip.system $OPTIONALS`" != 1 ]\
-&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 1.0; then
+&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 2.0; then
   FILE=/system/etc/vintf/manifest.xml
   patch_manifest
 fi
 if [ "`grep_prop dolby.skip.system_ext $OPTIONALS`" != 1 ]\
-&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 1.0; then
+&& ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 2.0; then
   FILE=/system/system_ext/etc/vintf/manifest.xml
   patch_manifest
 fi
-if ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 1.0; then
+if ! grep -A2 vendor.dolby.hardware.dms $FILE | grep -Eq 2.0; then
   patch_manifest_overlay_d
   if [ $EIM == false ]; then
     ui_print "- Using systemless manifest.xml patch."
@@ -711,8 +756,7 @@ fi
 # hide
 APP="`ls $MODPATH/system/priv-app` `ls $MODPATH/system/app`"
 hide_oat
-APP="MusicFX MotoDolbyDax3 MotoDolbyV3 OPSoundTuner
-     DolbyAtmos AudioEffectCenter"
+APP="MusicFX MotoDolbyDax3 MotoDolbyV3 DolbyAtmos AudioEffectCenter"
 for APPS in $APP; do
   hide_app
 done
@@ -798,13 +842,46 @@ else
   detect_soundfx
 fi
 
+# function
+grant_permission() {
+  if [ "$BOOTMODE" == true ] && ! dumpsys package $PKG | grep -Eq "$NAME: granted=true"; then
+    FILE=`find $MODPATH/system -type f -name $APP.apk`
+    ui_print "- Granting all runtime permissions for $PKG..."
+    RES=`pm install -g -i com.android.vending $FILE`
+    pm grant $PKG $NAME
+    if ! dumpsys package $PKG | grep -Eq "$NAME: granted=true"; then
+      ui_print "  ! Failed."
+      ui_print "  Maybe insufficient storage."
+    fi
+    RES=`pm uninstall -k $PKG`
+    ui_print " "
+  fi
+}
+
+# ui app
+if [ "`grep_prop dolby.daxui $OPTIONALS`" == 1 ]; then
+  ui_print "- Using DaxUI instead of OPSoundTuner"
+  APP=OPSoundTuner
+  ui_print " "
+else
+  APP=OPSoundTuner
+  PKG=com.oneplus.sound.tuner
+  NAME=android.permission.READ_CALL_LOG
+  grant_permission
+  sed -i 's/#p//g' $MODPATH/.aml.sh
+  APP=DaxUI
+fi
+for APPS in $APP; do
+  rm -rf `find $MODPATH/system -type d -name $APPS`
+  hide_app
+done
+
 # stream mode
 FILE=$MODPATH/.aml.sh
 PROP=`grep_prop stream.mode $OPTIONALS`
 if echo "$PROP" | grep -Eq m; then
   ui_print "- Activating music stream..."
   sed -i 's/#m//g' $FILE
-  sed -i 's/musicstream=/musicstream=true/g' $MODPATH/acdb.conf
   ui_print " "
 else
   APP=AudioFX
@@ -830,6 +907,12 @@ fi
 if echo "$PROP" | grep -Eq n; then
   ui_print "- Activating notification stream..."
   sed -i 's/#n//g' $FILE
+  ui_print " "
+fi
+if [ "`grep_prop ozo.audio $OPTIONALS`" != 0 ]; then
+  ui_print "- Activating Nokia OZO Audio Capture for camcorder, mic,"
+  ui_print "  and voice recognition stream..."
+  sed -i 's/#c//g' $FILE
   ui_print " "
 fi
 
@@ -951,7 +1034,7 @@ done
 }
 
 # check
-NAME="libstagefrightdolby.so
+NAME="libqtigef.so libstagefrightdolby.so
       libstagefright_soft_ddpdec.so
       libstagefright_soft_ac4dec.so"
 file_check_vendor
@@ -986,7 +1069,6 @@ rm -f $MODPATH/$NAME
 ui_print "- Flash /sdcard/$NAME"
 ui_print "  via recovery if you got bootloop"
 ui_print " "
-
 
 
 
