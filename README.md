@@ -8,7 +8,7 @@
 - Dolby Atmos soundfx equalizer & OZO Audio Capture soundfx ported from OnePlus 8 Visible (oneplus8visible) and integrated as a Magisk Module for all supported and rooted devices with Magisk
 - Global type soundfx
 
-# Sources
+## Sources
 - https://dumps.tadiphone.dev/dumps/oneplus/oneplus8visible qssi-user-11-RP1A.201005.001-2103312144-release-keys
 - system_10: https://dumps.tadiphone.dev/dumps/oneplus/oneplus8visible OnePlus8Visible-user-10-QKQ1.191222.002-2007221621-release-keys
 - DaxUI.apk & libswvqe.so: LENOVO TB-J606F
