@@ -5,7 +5,7 @@
 - The MIT license specified here is for the Magisk Module, not for Dolby apps and blobs.
 
 ## Descriptions
-- Dolby Atmos soundfx equalizer & OZO Audio Capture soundfx ported from OnePlus 8 Visible (oneplus8visible) and integrated as a Magisk Module for all supported and rooted devices with Magisk
+- Dolby Atmos soundfx equalizer ported from OnePlus 8 Visible (oneplus8visible) and integrated as a Magisk Module for all supported and rooted devices with Magisk
 - Global type soundfx
 
 ## Sources
