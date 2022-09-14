@@ -6,6 +6,7 @@
 
 ## Descriptions
 - Dolby Atmos soundfx equalizer ported from OnePlus 8 Visible (oneplus8visible) and integrated as a Magisk Module for all supported and rooted devices with Magisk
+- Nokia OZO Audio Capture, improves audio quality on video/audio recordings
 - Global type soundfx
 
 ## Sources
@@ -15,12 +16,12 @@
 - OZO Audio Capture soundfx: https://dumps.tadiphone.dev/dumps/oneplus/oneplus9pro qssi-user-11-RKQ1.201105.002-2111112053-release-keys
 
 ## Screenshots
-- https://t.me/androidryukimods/68
+- https://t.me/androidryukimodsdiscussions/51861
 
 ## Requirements
 - Android 9 and up
 - Architecture 64 bit
-- Magisk Installed
+- Magisk installed
 - Recommended to use Magisk Delta for systemless early init mount manifest.xml if your ROM is Read-Only https://t.me/androidryukimodsdiscussions/100091
 
 ## WARNING!!!
