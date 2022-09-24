@@ -19,6 +19,7 @@ chcon -R u:object_r:vendor_file:s0 $MODPATH/system/vendor
 chcon -R u:object_r:vendor_configs_file:s0 $MODPATH/system/vendor/etc
 chcon -R u:object_r:vendor_configs_file:s0 $MODPATH/system/vendor/odm/etc
 chcon u:object_r:hal_dms_default_exec:s0 $MODPATH/system/vendor/bin/hw/vendor.dolby.hardware.dms@*-service
+chcon u:object_r:hal_dms_default_exec:s0 $MODPATH/system/vendor/odm/bin/hw/vendor.dolby_v3_6.hardware.dms360@2.0-service
 chcon u:object_r:mediacodec_exec:s0 $MODPATH/system/vendor/bin/hw/vendor.ozoaudio.media.c2@*-service
 
 # etc
@@ -83,7 +84,7 @@ if [ "$SKU" ]; then
     fi
   done
 fi
-rm -f `find $MODPATH/system -type f -name *policy*volumes*.xml`
+rm -f `find $MODPATH/system -type f -name *policy*volume*.xml -o -name *audio*effects*spatializer*.xml`
 
 # media codecs
 NAME=media_codecs.xml
@@ -146,7 +147,12 @@ if ! grep -A2 vendor.dolby.hardware.dms $FILE | grep 2.0; then
   fi
 fi
 
-# AudioEffectCenter
+# mount
+DIR=/odm/bin/hw
+FILE=$DIR/vendor.dolby_v3_6.hardware.dms360@2.0-service
+if [ "`realpath $DIR`" == $DIR ] && [ -f $FILE ]; then
+  mount -o bind $MODPATH/system/vendor/$FILE $FILE
+fi
 if [ -f /my_product/app/AudioEffectCenter/AudioEffectCenter.apk ]; then
   mkdir $MODPATH/AudioEffectCenter
   mount -o bind $MODPATH/AudioEffectCenter /my_product/app/AudioEffectCenter
