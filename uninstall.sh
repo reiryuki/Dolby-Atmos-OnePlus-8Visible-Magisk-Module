@@ -6,7 +6,14 @@ PKG="com.oneplus.sound.tuner
      com.oneplus.config
      com.dolby.daxappui
      com.dolby.daxservice"
-     
+
+# boot mode
+if [ ! "$BOOTMODE" ]; then
+  [ -z $BOOTMODE ] && ps | grep zygote | grep -qv grep && BOOTMODE=true
+  [ -z $BOOTMODE ] && ps -A | grep zygote | grep -qv grep && BOOTMODE=true
+  [ -z $BOOTMODE ] && BOOTMODE=false
+fi
+
 # cleaning
 for PKGS in $PKG; do
   rm -rf /data/user/*/$PKGS
@@ -21,12 +28,11 @@ rm -rf /persist/magisk/"$MODID"
 rm -rf /data/unencrypted/magisk/"$MODID"
 rm -rf /cache/magisk/"$MODID"
 rm -rf /data/vendor/dolby
-
-# boot mode
-if [ ! "$BOOTMODE" ]; then
-  [ -z $BOOTMODE ] && ps | grep zygote | grep -qv grep && BOOTMODE=true
-  [ -z $BOOTMODE ] && ps -A | grep zygote | grep -qv grep && BOOTMODE=true
-  [ -z $BOOTMODE ] && BOOTMODE=false
+if [ "$BOOTMODE" != true ]; then
+  rm -rf `find /metadata/early-mount.d\
+  /mnt/vendor/persist/early-mount.d /persist/early-mount.d\
+  /data/unencrypted/early-mount.d /cache/early-mount.d\
+  /data/adb/modules/early-mount.d -type f -name manifest.xml`
 fi
 
 # magisk
