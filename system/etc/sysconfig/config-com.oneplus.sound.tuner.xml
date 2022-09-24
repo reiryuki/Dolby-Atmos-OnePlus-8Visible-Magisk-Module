@@ -2,4 +2,3 @@
 <config>
     <hidden-api-whitelisted-app package="com.oneplus.sound.tuner"/>
 </config>
-
