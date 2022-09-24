@@ -123,7 +123,8 @@ if [ "$MODAEX" ]; then
     sed -i "s/<apply effect=\"$RMVS\"\/>//g" $MODAEX
     sed -i "s/<apply effect=\"$RMVS\" \/>//g" $MODAEX
   done
-  if ! grep -Eq '<postprocess>' $MODAEX || grep -Eq '<!-- Audio post processor' $MODAEX; then
+  if ! grep -Eq '<postprocess>' $MODAEX\
+  || grep -Eq '<!-- Audio post processor' $MODAEX; then
     sed -i '/<\/effects>/a\
     <postprocess>\
         <stream type="music">\
@@ -140,7 +141,9 @@ if [ "$MODAEX" ]; then
         <\/stream>\
     <\/postprocess>' $MODAEX
   else
-    if ! grep -Eq '<stream type="notification">' $MODAEX || grep -Eq '<!-- YunMang.Xiao@PSW.MM.Dolby' $MODAEX; then
+    if ! grep -Eq '<stream type="notification">' $MODAEX\
+    || grep -Eq '<!-- YunMang.Xiao@PSW.MM.Dolby' $MODAEX\
+    || grep -Eq '<!-- WuHao@MULTIMEDIA.AUDIOSERVER.EFFECT' $MODAEX; then
       sed -i "/<postprocess>/a\        <stream type=\"notification\">\n        <\/stream>" $MODAEX
     fi
     if ! grep -Eq '<stream type="voice_call">' $MODAEX; then
@@ -149,13 +152,19 @@ if [ "$MODAEX" ]; then
     if ! grep -Eq '<stream type="system">' $MODAEX; then
       sed -i "/<postprocess>/a\        <stream type=\"system\">\n        <\/stream>" $MODAEX
     fi
-    if ! grep -Eq '<stream type="alarm">' $MODAEX || grep -Eq '<!-- YunMang.Xiao@PSW.MM.Dolby' $MODAEX; then
+    if ! grep -Eq '<stream type="alarm">' $MODAEX\
+    || grep -Eq '<!-- YunMang.Xiao@PSW.MM.Dolby' $MODAEX\
+    || grep -Eq '<!-- WuHao@MULTIMEDIA.AUDIOSERVER.EFFECT' $MODAEX; then
       sed -i "/<postprocess>/a\        <stream type=\"alarm\">\n        <\/stream>" $MODAEX
     fi
-    if ! grep -Eq '<stream type="ring">' $MODAEX || grep -Eq '<!-- YunMang.Xiao@PSW.MM.Dolby' $MODAEX; then
+    if ! grep -Eq '<stream type="ring">' $MODAEX\
+    || grep -Eq '<!-- YunMang.Xiao@PSW.MM.Dolby' $MODAEX\
+    || grep -Eq '<!-- WuHao@MULTIMEDIA.AUDIOSERVER.EFFECT' $MODAEX; then
       sed -i "/<postprocess>/a\        <stream type=\"ring\">\n        <\/stream>" $MODAEX
     fi
-    if ! grep -Eq '<stream type="music">' $MODAEX || grep -Eq '<!-- YunMang.Xiao@PSW.MM.Dolby' $MODAEX; then
+    if ! grep -Eq '<stream type="music">' $MODAEX\
+    || grep -Eq '<!-- YunMang.Xiao@PSW.MM.Dolby' $MODAEX\
+    || grep -Eq '<!-- WuHao@MULTIMEDIA.AUDIOSERVER.EFFECT' $MODAEX; then
       sed -i "/<postprocess>/a\        <stream type=\"music\">\n        <\/stream>" $MODAEX
     fi
   fi
@@ -303,10 +312,10 @@ if [ "$MODAEX" ]; then
 fi
 
 # patch audio policy
-#pif [ "$MODAP" ]; then
-#p  sed -i 's/COMPRESS_OFFLOAD/NONE/g' $MODAP
-#p  sed -i 's/,compressed_offload//g' $MODAP
-#pfi
+#oif [ "$MODAP" ]; then
+#o  sed -i 's/COMPRESS_OFFLOAD/NONE/g' $MODAP
+#o  sed -i 's/,compressed_offload//g' $MODAP
+#ofi
 
 # patch audio policy
 #uif [ "$MODAP" ]; then
