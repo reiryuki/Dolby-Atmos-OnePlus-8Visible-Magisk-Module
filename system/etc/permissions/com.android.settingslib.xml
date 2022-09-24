@@ -3,4 +3,3 @@
     <library name="com.android.settingslib"
         file="/system/framework/com.android.settingslib.jar"/>
 </permissions>
-
