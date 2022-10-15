@@ -18,9 +18,11 @@ chcon -R u:object_r:system_lib_file:s0 $MODPATH/system/lib*
 chcon -R u:object_r:vendor_file:s0 $MODPATH/system/vendor
 chcon -R u:object_r:vendor_configs_file:s0 $MODPATH/system/vendor/etc
 chcon -R u:object_r:vendor_configs_file:s0 $MODPATH/system/vendor/odm/etc
+chcon u:object_r:same_process_hal_file:s0 $MODPATH/system/vendor/lib*/libhidltransport.so
+chcon u:object_r:same_process_hal_file:s0 $MODPATH/system/vendor/lib*/libhwbinder.so
+chcon u:object_r:same_process_hal_file:s0 $MODPATH/system/vendor/lib*/libhidlbase.so
 chcon u:object_r:hal_dms_default_exec:s0 $MODPATH/system/vendor/bin/hw/vendor.dolby.hardware.dms@*-service
 chcon u:object_r:hal_dms_default_exec:s0 $MODPATH/system/vendor/odm/bin/hw/vendor.dolby_v3_6.hardware.dms360@2.0-service
-chcon u:object_r:mediacodec_exec:s0 $MODPATH/system/vendor/bin/hw/vendor.ozoaudio.media.c2@*-service
 
 # etc
 if [ -d /sbin/.magisk ]; then
@@ -57,7 +59,7 @@ fi
 NAME="*audio*effects*.conf -o -name *audio*effects*.xml -o -name *policy*.conf -o -name *policy*.xml"
 rm -f `find $MODPATH/system -type f -name $NAME`
 A=`find $ETC -maxdepth 1 -type f -name $NAME`
-VA=`find $VETC -maxdepth 1 -type f -name $NAME`
+VA=`find $VETC /odm/etc /my_product/etc -maxdepth 1 -type f -name $NAME`
 VOA=`find $VOETC -maxdepth 1 -type f -name $NAME`
 VAA=`find $VETC/audio -maxdepth 1 -type f -name $NAME`
 VBA=`find $VETC/audio/"$PROP" -maxdepth 1 -type f -name $NAME`
