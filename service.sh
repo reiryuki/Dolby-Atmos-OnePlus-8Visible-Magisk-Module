@@ -48,7 +48,7 @@ if [ "`realpath $DIR`" == $DIR ] && [ -f $FILE ]; then
 fi
 
 # run
-FILE="`realpath /vendor`/bin/hw/vendor.dolby.hardware.dms@2.0-service"
+FILE=`realpath /vendor`/bin/hw/vendor.dolby.hardware.dms@2.0-service
 run_service
 
 # restart
