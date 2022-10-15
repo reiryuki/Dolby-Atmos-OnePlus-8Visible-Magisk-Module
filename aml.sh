@@ -200,9 +200,11 @@ fi
 
 # dirac
 #2RMV="libdiraceffect.so dirac_gef 3799D6D1-22C5-43C3-B3EC-D664CF8D2F0D
-#2      libdirac.so dirac_controller b437f4de-da28-449b-9673-667f8b9643fe
-#2      dirac_music b437f4de-da28-449b-9673-667f8b964304
-#2      dirac e069d9e0-8329-11df-9168-0002a5d5c51b"
+#2     dirac_afm 743539F8-1076-451F-8395-84ACFAB0FAC7
+#2     dirac_controller 128B9BA2-D0C9-47C6-AFF3-9F761CD0E228
+#2     libdirac.so b437f4de-da28-449b-9673-667f8b9643fe
+#2     dirac_music b437f4de-da28-449b-9673-667f8b964304
+#2     dirac e069d9e0-8329-11df-9168-0002a5d5c51b"
 #2if [ "$MODAEC" ]; then
 #2  remove_conf
 #2fi
@@ -228,7 +230,8 @@ NAME=dap
 UUID=6ab06da4-c516-4611-8166-452799218539
 UUIDHW=a0c30891-8246-4aef-b8ad-d53e26da0253
 UUIDPROXY=9d4921da-8225-4f29-aefa-39537a04bcaa
-RMV="$LIB $LIBHW $LIBNAME $LIBNAMEHW $NAME $UUID $UUIDHW $UUIDPROXY"
+RMV="$LIB $LIBHW $LIBNAME $LIBNAMEHW $NAME $UUID
+     $UUIDHW $UUIDPROXY libeffectproxy.so"
 
 # patch audio effects conf
 if [ "$MODAEC" ]; then
@@ -284,33 +287,6 @@ if [ "$MODAEX" ]; then
   remove_xml
   sed -i "/<libraries>/a\        <library name=\"$LIBNAME\" path=\"$LIB\"\/>" $MODAEX
   sed -i "/<effects>/a\        <effect name=\"$NAME\" library=\"$LIBNAME\" uuid=\"$UUID\"\/>" $MODAEX
-fi
-
-# store
-LIB=libozoprocessing.so
-LIBNAME=ozo_processing
-NAME=ozo
-UUID=7e384a3b-7850-4a64-a097-884250d8a737
-RMV="$LIB $LIBNAME $NAME $UUID"
-
-# patch audio effects conf
-if [ "$MODAEC" ]; then
-  remove_conf
-  sed -i "/^libraries {/a\  $LIBNAME {\n    path $LIBPATH\/$LIB\n  }" $MODAEC
-  sed -i "/^effects {/a\  $NAME {\n    library $LIBNAME\n    uuid $UUID\n  }" $MODAEC
-#c  sed -i "/^  camcorder {/a\    $NAME {\n    }" $MODAEC
-#c  sed -i "/^  mic {/a\    $NAME {\n    }" $MODAEC
-#c  sed -i "/^  voice_recognition {/a\    $NAME {\n    }" $MODAEC
-fi
-
-# patch audio effects xml
-if [ "$MODAEX" ]; then
-  remove_xml
-  sed -i "/<libraries>/a\        <library name=\"$LIBNAME\" path=\"$LIB\"\/>" $MODAEX
-  sed -i "/<effects>/a\        <effect name=\"$NAME\" library=\"$LIBNAME\" uuid=\"$UUID\"\/>" $MODAEX
-#c  sed -i "/<stream type=\"camcorder\">/a\            <apply effect=\"$NAME\"\/>" $MODAEX
-#c  sed -i "/<stream type=\"mic\">/a\            <apply effect=\"$NAME\"\/>" $MODAEX
-#c  sed -i "/<stream type=\"voice_recognition\">/a\            <apply effect=\"$NAME\"\/>" $MODAEX
 fi
 
 # patch audio policy
