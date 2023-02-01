@@ -691,7 +691,7 @@ if [ "$BOOTMODE" == true ]\
 && ! dumpsys package $PKG | grep -Eq "$NAME: granted=true"; then
   FILE=`find $MODPATH/system -type f -name $APP.apk`
   ui_print "- Granting all runtime permissions for $PKG..."
-  RES=`pm install -g -i com.android.vending $FILE`
+  RES=`pm install -g -i com.android.vending $FILE 2>/dev/null`
   pm grant $PKG $NAME
   if ! dumpsys package $PKG | grep -Eq "$NAME: granted=true"; then
     ui_print "  ! Failed."
@@ -699,7 +699,7 @@ if [ "$BOOTMODE" == true ]\
     ui_print "  or maybe there is in-built $PKG exist."
     ui_print "  Just ignore this."
   fi
-  RES=`pm uninstall -k $PKG`
+  RES=`pm uninstall -k $PKG 2>/dev/null`
   ui_print " "
 fi
 }
