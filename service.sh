@@ -207,6 +207,7 @@ else
   SVC=mediaserver
 fi
 PROC="com.dolby.daxservice com.oneplus.sound.tuner com.dolby.daxappui"
+killall $PROC
 check_audioserver
 
 
