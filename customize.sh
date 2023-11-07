@@ -23,7 +23,10 @@ if [ "`grep_prop debug.log $OPTIONALS`" == 1 ]; then
 fi
 
 # var
-LIST32BIT=`getprop ro.product.cpu.abilist32`
+LIST32BIT=`grep_get_prop ro.product.cpu.abilist32`
+if [ ! "$LIST32BIT" ]; then
+  LIST32BIT=`grep_get_prop ro.system.product.cpu.abilist32`
+fi
 
 # run
 . $MODPATH/function.sh
@@ -102,6 +105,16 @@ PRODUCT=`realpath $MIRROR/product`
 SYSTEM_EXT=`realpath $MIRROR/system_ext`
 ODM=`realpath $MIRROR/odm`
 MY_PRODUCT=`realpath $MIRROR/my_product`
+
+# check
+FILE=/bin/hw/vendor.dolby.media.c2@1.0-service
+if [ -f /system$FILE ] || [ -f /vendor$FILE ]\
+|| [ -f /odm$FILE ] || [ -f /system_ext$FILE ]\
+|| [ -f /product$FILE ]; then
+  ui_print "! This module is conflicting with your"
+  ui_print "  $FILE"
+  abort
+fi
 
 # check
 if [ "`grep_prop dolby.10 $OPTIONALS`" == 1 ]; then
@@ -299,12 +312,14 @@ fi
 # cleanup
 DIR=/data/adb/modules/$MODID
 FILE=$DIR/module.prop
+PREVMODNAME=`grep_prop name $FILE`
 if [ "`grep_prop data.cleanup $OPTIONALS`" == 1 ]; then
   sed -i 's|^data.cleanup=1|data.cleanup=0|g' $OPTIONALS
   ui_print "- Cleaning-up $MODID data..."
   cleanup
   ui_print " "
-elif [ -d $DIR ] && ! grep -q "$MODNAME" $FILE; then
+elif [ -d $DIR ]\
+&& [ "$PREVMODNAME" != "$MODNAME" ]; then
   ui_print "- Different version detected"
   ui_print "  Cleaning-up $MODID data..."
   cleanup
@@ -938,7 +953,7 @@ if "$IS64BIT"; then
          /lib64/libstagefright_soft_ac4dec.so"
   file_check_vendor
 fi
-if [ "LIST32BIT" ]; then
+if [ "$LIST32BIT" ]; then
   FILES="/lib/libqtigef.so
          /lib/libdeccfg.so
          /lib/libstagefrightdolby.so
