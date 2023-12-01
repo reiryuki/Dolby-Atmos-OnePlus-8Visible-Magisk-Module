@@ -15,6 +15,7 @@ resetprop ro.vendor.dolby.dax.version DAX3_3.5.6.11_r1
 #11resetprop ro.vendor.product.manufacturer.db OP_PHONE
 #10resetprop vendor.product.device OP_PHONE
 #10resetprop vendor.product.manufacturer OPD
+resetprop ro.dolby.mod_uuid false
 resetprop vendor.audio.dolby.ds2.enabled false
 resetprop vendor.audio.dolby.ds2.hardbypass false
 #resetprop vendor.audio.gef.debug.flags false
