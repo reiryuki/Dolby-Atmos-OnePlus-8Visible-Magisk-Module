@@ -7,7 +7,7 @@
 ## Descriptions
 - Dolby Atmos soundfx equalizer ported from OnePlus 8 Visible (oneplus8visible) and integrated as a Magisk Module for all supported and rooted devices with Magisk
 - Global type soundfx
-- Conflicted with vendor.dolby_v3_6.hardware.dms360@2.0-service
+- Conflicted with vendor.dolby_v3_6.hardware.dms360@2.0-service & vendor.dolby.hardware.dms@1.0-service
 - Doesn't support ACDB Magisk Module because using effect proxy
 
 ## Sources
