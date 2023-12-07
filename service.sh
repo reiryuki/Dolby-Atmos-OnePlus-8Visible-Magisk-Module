@@ -9,19 +9,19 @@ set -x
 API=`getprop ro.build.version.sdk`
 
 # property
-resetprop ro.audio.ignore_effects false
-resetprop ro.vendor.dolby.dax.version DAX3_3.5.6.11_r1
-#11resetprop ro.vendor.product.device.db OP_DEVICE
-#11resetprop ro.vendor.product.manufacturer.db OP_PHONE
-#10resetprop vendor.product.device OP_PHONE
-#10resetprop vendor.product.manufacturer OPD
-resetprop ro.dolby.mod_uuid false
-resetprop vendor.audio.dolby.ds2.enabled false
-resetprop vendor.audio.dolby.ds2.hardbypass false
-#resetprop vendor.audio.gef.debug.flags false
-#resetprop vendor.audio.gef.enable.traces false
-#resetprop vendor.dolby.dap.param.tee false
-#resetprop vendor.dolby.mi.metadata.log false
+resetprop -n ro.audio.ignore_effects false
+resetprop -n ro.vendor.dolby.dax.version DAX3_3.5.6.11_r1
+#11resetprop -n ro.vendor.product.device.db OP_DEVICE
+#11resetprop -n ro.vendor.product.manufacturer.db OP_PHONE
+#10resetprop -n vendor.product.device OP_PHONE
+#10resetprop -n vendor.product.manufacturer OPD
+resetprop -n ro.dolby.mod_uuid false
+resetprop -n vendor.audio.dolby.ds2.enabled false
+resetprop -n vendor.audio.dolby.ds2.hardbypass false
+#resetprop -n vendor.audio.gef.debug.flags false
+#resetprop -n vendor.audio.gef.enable.traces false
+#resetprop -n vendor.dolby.dap.param.tee false
+#resetprop -n vendor.dolby.mi.metadata.log false
 
 # restart
 if [ "$API" -ge 24 ]; then
@@ -83,6 +83,7 @@ killall vendor.qti.hardware.vibrator.service\
  android.hardware.sensors@2.0-service-mediatek\
  android.hardware.sensors@2.0-service.multihal\
  android.hardware.health-service.qti
+#skillall vendor.qti.hardware.display.allocator-service
 
 # wait
 sleep 20
