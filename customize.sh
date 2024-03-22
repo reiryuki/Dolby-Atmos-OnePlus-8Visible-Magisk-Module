@@ -102,11 +102,62 @@ if [ -f $SYSTEM$FILE ] || [ -f $VENDOR$FILE ]\
   ui_print " "
 fi
 
+# function
+check_function_2() {
+if [ -f $MODPATH/system_support$DIR/$LIB ]; then
+  ui_print "- Checking"
+  ui_print "$NAME"
+  ui_print "  function at"
+  ui_print "$FILE"
+  ui_print "  Please wait..."
+  if ! grep -q $NAME $FILE; then
+    ui_print "  Function not found."
+    ui_print "  Replaces /system$DIR/$LIB."
+    mv -f $MODPATH/system_support$DIR/$LIB $MODPATH/system$DIR
+    [ "$MES" ] && ui_print "$MES"
+  fi
+  ui_print " "
+fi
+}
+check_function() {
+if [ -d $MODPATH/system_support/vendor$DIR/hw ]; then
+  ui_print "- Checking"
+  ui_print "$NAME"
+  ui_print "  function at"
+  ui_print "$FILE"
+  ui_print "  Please wait..."
+  if grep -q $NAME $FILE; then
+    ui_print " "
+  else
+    ui_print "  Function not found."
+    ui_print "  Replaces /vendor$DIR/hw/*audio*.so."
+    mv -f $MODPATH/system_support/vendor$DIR/hw $MODPATH/system/vendor$DIR
+    [ "$MES" ] && ui_print "$MES"
+    ui_print " "
+    FILE=$SYSTEM$DIR/$LIB
+    check_function_2
+  fi
+fi
+}
+find_file() {
+for LIB in $LIBS; do
+  if [ -f $MODPATH/system_support$DIR/$LIB ]; then
+    FILE=`find $SYSTEM$DIR $SYSTEM_EXT$DIR -type f -name $LIB`
+    if [ ! "$FILE" ]; then
+      ui_print "- Using /system$DIR/$LIB."
+      mv -f $MODPATH/system_support$DIR/$LIB $MODPATH/system$DIR
+      ui_print " "
+    fi
+  fi
+done
+}
+
 # check
+NAME=_ZN7android23sp_report_stack_pointerEv
+LIB=libhidlbase.so
 if [ "`grep_prop dolby.10 $OPTIONALS`" == 1 ]; then
   SYSTEM_10=true
-else
-  NAME=_ZN7android23sp_report_stack_pointerEv
+elif [ "$API" -le 29 ]; then
   if [ "$IS64BIT" == true ]; then
     FILE=$VENDOR/lib64/hw/*audio*.so
     ui_print "- Checking"
@@ -146,7 +197,35 @@ else
   else
     SYSTEM_10=true
   fi
+else
+  SYSTEM_10=false
+  if [ "$IS64BIT" == true ]; then
+    DIR=/lib64
+    FILE=$VENDOR$DIR/hw/*audio*.so
+    check_function
+  fi
+  if [ "$LIST32BIT" ]; then
+    DIR=/lib
+    FILE=$VENDOR$DIR/hw/*audio*.so
+    check_function
+  fi
 fi
+NAME=_ZN7android8hardware23getOrCreateCachedBinderEPNS_4hidl4base4V1_05IBaseE
+DES=vendor.dolby.hardware.dms@2.0.so
+if [ "$IS64BIT" == true ]; then
+  DIR=/lib64
+  LISTS=`strings $MODPATH/system/vendor$DIR/$DES | grep ^lib | grep .so`
+  FILE=`for LIST in $LISTS; do echo $SYSTEM$DIR/$LIST; done`
+  check_function_2
+fi
+if [ "$LIST32BIT" ]; then
+  DIR=/lib
+  LISTS=`strings $MODPATH/system/vendor$DIR/$DES | grep ^lib | grep .so`
+  FILE=`for LIST in $LISTS; do echo $SYSTEM$DIR/$LIST; done`
+  check_function_2
+fi
+
+# check
 if [ "$SYSTEM_10" == true ]; then
   ui_print "- Using legacy libraries"
   if [ "$API" -ge 30 ]; then
@@ -155,63 +234,9 @@ if [ "$SYSTEM_10" == true ]; then
   cp -rf $MODPATH/system_10/* $MODPATH/system
   sed -i 's|#10||g' $MODPATH/service.sh
   ui_print " "
-else
-  sed -i 's|#11||g' $MODPATH/service.sh
-fi
-rm -rf $MODPATH/system_10
-
-# function
-check_function() {
-if [ -f $MODPATH/system_support$DIR/$LIB ]; then
-  ui_print "- Checking"
-  ui_print "$NAME"
-  ui_print "  function at"
-  ui_print "$FILE"
-  ui_print "  Please wait..."
-  if ! grep -q $NAME $FILE; then
-    ui_print "  Function not found."
-    ui_print "  Replaces /system$DIR/$LIB."
-    mv -f $MODPATH/system_support$DIR/$LIB $MODPATH/system$DIR
-    [ "$MES" ] && ui_print "$MES"
-  fi
-  ui_print " "
-fi
-}
-find_file() {
-for LIB in $LIBS; do
-  if [ -f $MODPATH/system_support$DIR/$LIB ]; then
-    FILE=`find $SYSTEM$DIR $SYSTEM_EXT$DIR -type f -name $LIB`
-    if [ ! "$FILE" ]; then
-      ui_print "- Using /system$DIR/$LIB."
-      mv -f $MODPATH/system_support$DIR/$LIB $MODPATH/system$DIR
-      ui_print " "
-    fi
-  fi
-done
-}
-
-# check
-NAME=_ZN7android8hardware23getOrCreateCachedBinderEPNS_4hidl4base4V1_05IBaseE
-DES=vendor.dolby.hardware.dms@2.0.so
-LIB=libhidlbase.so
-MES="  Dolby Atmos may not work."
-if [ "$IS64BIT" == true ]; then
-  DIR=/lib64
-  LISTS=`strings $MODPATH/system/vendor$DIR/$DES | grep ^lib | grep .so`
-  FILE=`for LIST in $LISTS; do echo $SYSTEM$DIR/$LIST; done`
-  check_function
-fi
-if [ "$LIST32BIT" ]; then
-  DIR=/lib
-  LISTS=`strings $MODPATH/system/vendor$DIR/$DES | grep ^lib | grep .so`
-  FILE=`for LIST in $LISTS; do echo $SYSTEM$DIR/$LIST; done`
-  check_function
-fi
-
-# check
-if [ "$SYSTEM_10" == true ]; then
   LIBS="libhidltransport.so libhwbinder.so"
 else
+  sed -i 's|#11||g' $MODPATH/service.sh
   LIBS=libhidltransport.so
 fi
 if [ "$IS64BIT" == true ]; then
@@ -222,7 +247,6 @@ if [ "$LIST32BIT" ]; then
   DIR=/lib
   find_file
 fi
-rm -rf $MODPATH/system_support
 
 # sepolicy
 FILE=$MODPATH/sepolicy.rule
@@ -263,7 +287,6 @@ if [ "$MOD_UI" != true ] && [ "$PROP" ]\
   cp -rf $MODPATH/system_36dB/* $MODPATH/system
   ui_print " "
 fi
-rm -rf $MODPATH/system_36dB
 
 # cleaning
 ui_print "- Cleaning..."
@@ -282,7 +305,8 @@ if [ "`grep_prop dolby.mod $OPTIONALS`" == 1 ]; then
 else
   rm -f /data/vendor/dolby/dax_sqlite3.db
 fi
-rm -rf $MODPATH/unused
+rm -rf $MODPATH/system_support $MODPATH/system_10\
+ $MODPATH/system_36dB $MODPATH/unused
 remove_sepolicy_rule
 ui_print " "
 
@@ -302,12 +326,12 @@ for NAME in $NAMES; do
     sh $FILE
     rm -f $FILE
   fi
-  rm -rf /metadata/magisk/$NAME
-  rm -rf /mnt/vendor/persist/magisk/$NAME
-  rm -rf /persist/magisk/$NAME
-  rm -rf /data/unencrypted/magisk/$NAME
-  rm -rf /cache/magisk/$NAME
-  rm -rf /cust/magisk/$NAME
+  rm -rf /metadata/magisk/$NAME\
+   /mnt/vendor/persist/magisk/$NAME\
+   /persist/magisk/$NAME\
+   /data/unencrypted/magisk/$NAME\
+   /cache/magisk/$NAME\
+   /cust/magisk/$NAME
 done
 }
 
@@ -666,7 +690,9 @@ grant_permission() {
 if [ "$BOOTMODE" == true ]\
 && ! dumpsys package $PKG | grep -q "$NAME: granted=true"; then
   FILE=`find $MODPATH/system -type f -name $APP.apk`
-  ui_print "- Granting all runtime permissions for $PKG..."
+  ui_print "- Granting all runtime permissions"
+  ui_print "  for $PKG"
+  ui_print "  Please wait..."
   RES=`pm install -g -i com.android.vending $FILE 2>/dev/null`
   pm grant $PKG $NAME
   if ! dumpsys package $PKG | grep -q "$NAME: granted=true"; then
@@ -684,7 +710,7 @@ fi
 if [ "$MOD_UI" != true ]\
 && [ "`grep_prop dolby.daxui $OPTIONALS`" == 1 ]; then
   ui_print "- Using DaxUI instead of OPSoundTuner"
-  APPS=OPSoundTuner
+  APPS="OPSoundTuner OPOnlineConfig framework"
   ui_print " "
 else
   APP=OPSoundTuner
@@ -693,6 +719,15 @@ else
   grant_permission
   sed -i 's|#o||g' $MODPATH/.aml.sh
   APPS=DaxUI
+  NAME=OPOnlineConfig
+  ui_print "- Checking $NAME.apk..."
+  FILE=`find $SYSTEM $SYSTEM_EXT $PRODUCT $MY_PRODUCT\
+         $VENDOR -type f -name $NAME.apk`
+  if [ "$FILE" ]; then
+    ui_print "  Detected $NAME.apk"
+    APPS="DaxUI $NAME"
+  fi
+  ui_print " "
 fi
 for APP in $APPS; do
   rm -rf `find $MODPATH/system -type d -name $APP`

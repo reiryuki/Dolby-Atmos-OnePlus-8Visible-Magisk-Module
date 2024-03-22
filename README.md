@@ -15,6 +15,7 @@
 - system_10: https://dumps.tadiphone.dev/dumps/oneplus/oneplus8visible OnePlus8Visible-user-10-QKQ1.191222.002-2007221621-release-keys
 - DaxUI.apk & libswvqe.so: LENOVO TB-J606F
 - libhidlbase.so: CrDroid ROM Android 13
+- android.hardware.audio.effect@*-impl.so: https://dumps.tadiphone.dev/dumps/oneplus/op594dl1 qssi-user-14-UKQ1.230924.001-1701915639192-release-keys--US
 
 ## Screenshots
 - https://t.me/androidryukimodsdiscussions/51861
@@ -56,13 +57,12 @@
 - Android 12 AncientOS ROM
 - Android 12.1 Nusantara ROM
 - Android 13 CrDroid ROM
-
-## Known Issue
-- Unsupported in some Android 14 ROMs
+- Android 14 LineageOS ROM
 
 ## Credits and Contributors
 - https://t.me/viperatmos
 - https://t.me/androidryukimodsdiscussions
+- @HELLBOY017
 - You can contribute ideas about this Magisk Module here: https://t.me/androidappsportdevelopment
 
 ## Sponsors
