@@ -892,6 +892,37 @@ fi
 ui_print " "
 
 # function
+file_check_vendor() {
+for FILE in $FILES; do
+  DES=$VENDOR$FILE
+  DES2=$ODM$FILE
+  if [ -f $DES ] || [ -f $DES2 ]; then
+    ui_print "- Detected $FILE"
+    ui_print " "
+    rm -f $MODPATH/system/vendor$FILE
+  fi
+done
+}
+
+# check
+if [ "$IS64BIT" == true ]; then
+  FILES="/lib64/libqtigef.so
+         /lib64/libdeccfg.so
+         /lib64/libstagefrightdolby.so
+         /lib64/libstagefright_soft_ddpdec.so
+         /lib64/libstagefright_soft_ac4dec.so"
+  file_check_vendor
+fi
+if [ "$LIST32BIT" ]; then
+  FILES="/lib/libqtigef.so
+         /lib/libdeccfg.so
+         /lib/libstagefrightdolby.so
+         /lib/libstagefright_soft_ddpdec.so
+         /lib/libstagefright_soft_ac4dec.so"
+  file_check_vendor
+fi
+
+# function
 rename_file() {
 if [ -f $FILE ]; then
   ui_print "- Renaming"
@@ -913,6 +944,24 @@ fi
 }
 
 # mod
+NAME=libstagefright_foundation.so
+NAME2=libstagefright_fdtn_dolby.so
+if [ "$IS64BIT" == true ]; then
+  FILE=$MODPATH/system/vendor/lib64/$NAME
+  MODFILE=$MODPATH/system/vendor/lib64/$NAME2
+  rename_file
+fi
+if [ "$LIST32BIT" ]; then
+  FILE=$MODPATH/system/vendor/lib/$NAME
+  MODFILE=$MODPATH/system/vendor/lib/$NAME2
+  rename_file
+fi
+FILE="$MODPATH/system/vendor/lib*/$NAME2
+$MODPATH/system/vendor/lib*/libdlbdsservice.so
+$MODPATH/system/vendor/lib*/libstagefrightdolby.so
+$MODPATH/system/vendor/lib*/libstagefright_soft_ddpdec.so
+$MODPATH/system/vendor/lib*/libstagefright_soft_ac4dec.so"
+change_name
 if [ "`grep_prop dolby.mod $OPTIONALS`" == 1 ]; then
   NAME=dax-default.xml
   NAME2=dap-default.xml
@@ -987,37 +1036,6 @@ $MODPATH/system/vendor/bin/hw/vendor.dolby*.hardware.dms*@*-service"
   change_name
   NAME=d53e26da0253
   change_name
-fi
-
-# function
-file_check_vendor() {
-for FILE in $FILES; do
-  DES=$VENDOR$FILE
-  DES2=$ODM$FILE
-  if [ -f $DES ] || [ -f $DES2 ]; then
-    ui_print "- Detected $FILE"
-    ui_print " "
-    rm -f $MODPATH/system/vendor$FILE
-  fi
-done
-}
-
-# check
-if [ "$IS64BIT" == true ]; then
-  FILES="/lib64/libqtigef.so
-         /lib64/libdeccfg.so
-         /lib64/libstagefrightdolby.so
-         /lib64/libstagefright_soft_ddpdec.so
-         /lib64/libstagefright_soft_ac4dec.so"
-  file_check_vendor
-fi
-if [ "$LIST32BIT" ]; then
-  FILES="/lib/libqtigef.so
-         /lib/libdeccfg.so
-         /lib/libstagefrightdolby.so
-         /lib/libstagefright_soft_ddpdec.so
-         /lib/libstagefright_soft_ac4dec.so"
-  file_check_vendor
 fi
 
 # fix sensor
