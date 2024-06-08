@@ -16,6 +16,7 @@
 - DaxUI.apk & libswvqe.so: LENOVO TB-J606F
 - libhidlbase.so, libhidltransport.so, & libhwbinder.so: CrDroid ROM Android 13
 - android.hardware.audio.effect@*-impl.so: https://dumps.tadiphone.dev/dumps/oneplus/op594dl1 qssi-user-14-UKQ1.230924.001-1701915639192-release-keys--US
+- libmagiskpolicy.so: Kitsune Mask R65C33E4F
 
 ## Screenshots
 - https://t.me/androidryukimodsdiscussions/51861
