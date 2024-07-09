@@ -5,8 +5,8 @@
 - The MIT license specified here is for the Magisk Module only, not for OnePlus & Dolby apps and blobs.
 
 ## Descriptions
-- Dolby Atmos soundfx equalizer ported from OnePlus 8 Visible (oneplus8visible) and integrated as a Magisk Module for all supported and rooted devices with Magisk
-- Global type soundfx
+- Equalizer sound effect ported from OnePlus 8 Visible (oneplus8visible) and integrated as a Magisk Module for all supported and rooted devices with Magisk
+- Global type sound effect
 - Conflicted with `vendor.dolby_v3_6.hardware.dms360@2.0-service`, `vendor.dolby_sp.hardware.dmssp@2.0-service`, & `vendor.dolby.hardware.dms@1.0-service`
 - Doesn't support ACDB Magisk Module because using effect proxy
 
@@ -36,9 +36,11 @@
 - If you have Dolby in-built in your ROM, then you need to activate data.cleanup=1 at the first time install (READ Optionals bellow!)
 - Install this module https://www.pling.com/p/1461991/ via Magisk app or KernelSU app or Recovery if Magisk installed
 - Install AML Magisk Module https://t.me/androidryukimodsdiscussions/29836 only if using any other else audio mod module
+- If you are using KernelSU, you need to disable Unmount Modules by Default in KernelSU app settings
 - Reboot
 - If you are using KernelSU, you need to allow superuser list manually all package name listed in package.txt (and your home launcher app also) (enable show system apps) and reboot afterwards
 - If you are using SUList, you need to allow list manually your home launcher app (enable show system apps) and reboot afterwards
+- If you have sensors issue (fingerprint, proximity, gyroscope, etc), then READ Optionals bellow!
 
 ## Optionals
 - https://t.me/androidryukimodsdiscussions/2616
