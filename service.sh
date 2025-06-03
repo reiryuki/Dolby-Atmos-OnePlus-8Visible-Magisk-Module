@@ -179,10 +179,7 @@ fi
 # grant
 PKG=com.oneplus.sound.tuner
 if appops get $PKG > /dev/null 2>&1; then
-  pm grant $PKG android.permission.READ_EXTERNAL_STORAGE
-  pm grant $PKG android.permission.WRITE_EXTERNAL_STORAGE
-  pm grant $PKG android.permission.READ_PHONE_STATE
-  pm grant $PKG android.permission.READ_CALL_LOG
+  pm grant --all-permissions $PKG
   if [ "$API" -ge 30 ]; then
     appops set $PKG AUTO_REVOKE_PERMISSIONS_IF_UNUSED ignore
   fi
@@ -199,15 +196,16 @@ fi
 
 # grant
 PKG=com.dolby.daxservice
-pm grant $PKG android.permission.READ_EXTERNAL_STORAGE
-pm grant $PKG android.permission.WRITE_EXTERNAL_STORAGE
-if [ "$API" -ge 30 ]; then
-  appops set $PKG AUTO_REVOKE_PERMISSIONS_IF_UNUSED ignore
-fi
-PKGOPS=`appops get $PKG`
-UID=`dumpsys package $PKG 2>/dev/null | grep -m 1 Id= | sed -e 's|    userId=||g' -e 's|    appId=||g'`
-if [ "$UID" ] && [ "$UID" -gt 9999 ]; then
-  UIDOPS=`appops get --uid "$UID"`
+if appops get $PKG > /dev/null 2>&1; then
+  pm grant --all-permissions $PKG
+  if [ "$API" -ge 30 ]; then
+    appops set $PKG AUTO_REVOKE_PERMISSIONS_IF_UNUSED ignore
+  fi
+  PKGOPS=`appops get $PKG`
+  UID=`dumpsys package $PKG 2>/dev/null | grep -m 1 Id= | sed -e 's|    userId=||g' -e 's|    appId=||g'`
+  if [ "$UID" ] && [ "$UID" -gt 9999 ]; then
+    UIDOPS=`appops get --uid "$UID"`
+  fi
 fi
 
 # audio flinger

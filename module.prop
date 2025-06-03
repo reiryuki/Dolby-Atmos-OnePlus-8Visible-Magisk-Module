@@ -1,7 +1,7 @@
 id=DolbyAtmos
 name=Dolby Atmos OnePlus 8 Visible
-version=v1.1.3
-versionCode=113
+version=v1.1.4
+versionCode=114
 author=Rei Ryuki the Fixer
 description=Equalizer global type sound effect ported from OnePlus 8 Visible for any arm64-v8a architecture, Android 9 (SDK 28) and up.
 
