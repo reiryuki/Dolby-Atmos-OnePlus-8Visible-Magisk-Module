@@ -16,6 +16,7 @@
 - libsqlite.so: https://dumps.tadiphone.dev/dumps/zte/p855a01 msmnile-user-11-RKQ1.201221.002-20211215.223102-release-keys
 - DaxUI.apk & libswvqe.so: LENOVO TB-J606F https://t.me/c/1331480009/94136
 - libhidlbase.so, libhidltransport.so, & libhwbinder.so: CrDroid ROM Android 13
+- libutils.so: LineageOS 23 Android 16 BP2A.250605.031.A2 1758630651
 - android.hardware.audio.effect@*-impl.so: https://dumps.tadiphone.dev/dumps/oneplus/op594dl1 qssi-user-14-UKQ1.230924.001-1701915639192-release-keys--US
 - libmagiskpolicy.so: Kitsune Mask R6687BB53
 
