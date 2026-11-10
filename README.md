@@ -30,7 +30,7 @@ https://t.me/androidryukimodsdiscussions/51861
 
 ## Download Links and Changelog
 
-v1.2.4 https://github.com/reiryuki/Dolby-Atmos-OnePlus-8Visible-Magisk-Module
+v1.2.4 https://move2link.co/7461d8a
 - Update libmagiskpolicy.so from Magisk (debug) 31.0 (31000)
 - Prepare /storage/emulated/"$UID"/Android/data/$PKG/ directories
 - Add a new optional dolby.mod_xml to let users to use any modified/custom dax-default.xml. Please read Optionals below.
