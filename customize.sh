@@ -301,35 +301,43 @@ if [ "`grep_prop dolby.10 $OPTIONALS`" == 1 ]; then
 elif [ "$API" -le 29 ]; then
   if [ "$IS64BIT" == true ]; then
     FILE=$VENDOR/lib64/hw/*audio*.so
-    ui_print "- Checking"
-    ui_print "$NAME"
-    ui_print "  function at"
-    ui_print "$FILE"
-    ui_print "  Please wait..."
-    if grep -q $NAME $FILE; then
-      FUNC64=true
+    if [ -d $MODPATH/system_support/vendor/lib64/hw ]; then
+      ui_print "- Checking"
+      ui_print "$NAME"
+      ui_print "  function at"
+      ui_print "$FILE"
+      ui_print "  Please wait..."
+      if grep -q $NAME $FILE; then
+        FUNC64=true
+      else
+        ui_print "  Function not found."
+        FUNC64=false
+      fi
+      ui_print " "
     else
-      ui_print "  Function not found."
       FUNC64=false
     fi
-    ui_print " "
   else
     FUNC64=false
   fi
   if [ "$ABILIST32" ]; then
     FILE=$VENDOR/lib/hw/*audio*.so
-    ui_print "- Checking"
-    ui_print "$NAME"
-    ui_print "  function at"
-    ui_print "$FILE"
-    ui_print "  Please wait..."
-    if grep -q $NAME $FILE; then
-      FUNC32=true
+    if [ -d $MODPATH/system_support/vendor/lib/hw ]; then
+      ui_print "- Checking"
+      ui_print "$NAME"
+      ui_print "  function at"
+      ui_print "$FILE"
+      ui_print "  Please wait..."
+      if grep -q $NAME $FILE; then
+        FUNC32=true
+      else
+        ui_print "  Function not found."
+        FUNC32=false
+      fi
+      ui_print " "
     else
-      ui_print "  Function not found."
       FUNC32=false
     fi
-    ui_print " "
   else
     FUNC32=false
   fi
@@ -1008,6 +1016,22 @@ elif [ "$PROP" ] && [ "$PROP" != def ] && [ "$PROP" -gt 0 ]; then
     done
   else
     ui_print "- This version does not support bass-enhancer-boost"
+  fi
+fi
+PROP=`grep_prop dolby.bass_freq $OPTIONALS`
+if [ "$PROP" ] && [ "$PROP" != def ] && [ "$PROP" -gt 0 ]; then
+  ui_print "- Changing all bass-enhancer-enable value to true"
+  sed -i 's|bass-enhancer-enable value="false"|bass-enhancer-enable value="true"|g' $FILE
+  ROWS=`grep bass-enhancer-cutoff-frequency $FILE | sed -e 's|<bass-enhancer-cutoff-frequency value="||g' -e 's|"/>||g' -e 's|" />||g'`
+  if [ "$ROWS" ]; then
+    ui_print "- Default bass-enhancer-cutoff-frequency value:"
+    ui_print "$ROWS"
+    ui_print "- Changing all bass-enhancer-cutoff-frequency value to $PROP"
+    for ROW in $ROWS; do
+      sed -i "s|bass-enhancer-cutoff-frequency value=\"$ROW\"|bass-enhancer-cutoff-frequency value=\"$PROP\"|g" $FILE
+    done
+  else
+    ui_print "- This version does not support bass-enhancer-cutoff-frequency"
   fi
 fi
 if [ "`grep_prop dolby.virtualizer $OPTIONALS`" == 1 ]; then

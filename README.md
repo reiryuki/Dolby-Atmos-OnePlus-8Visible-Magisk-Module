@@ -30,6 +30,10 @@ https://t.me/androidryukimodsdiscussions/51861
 
 ## Download Links and Changelog
 
+v1.2.5 https://github.com/reiryuki/Dolby-Atmos-OnePlus-8Visible-Magisk-Module
+- Add a new optional dolby.bass_freq to change bass-enhancer-cutoff-frequency values. Please read Optionals below.
+- Fix sepolicy denials in Android 17
+
 v1.2.4 https://move2link.co/7461d8a
 - Update libmagiskpolicy.so from Magisk (debug) 31.0 (31000)
 - Prepare /storage/emulated/"$UID"/Android/data/$PKG/ directories
@@ -55,7 +59,7 @@ v1.2.0
 - Hides in-bulit LunarisDolby.apk
 
 v1.1.9
-- Update libmagiskpolicy.so from Magisk (stable) 30.7 (30700) (fixes selinux denials in KernelSU)
+- Update libmagiskpolicy.so from Magisk (stable) 30.7 (30700) (fixes sepolicy denials in KernelSU)
 - Does not disable raw playback (You can use Audio Compatibility Patch Reborn Magisk Module instead)
 
 v1.1.8
@@ -70,11 +74,6 @@ v1.1.6
 - Tidy up aml.sh
 - Exclude \*audio\*effects\*haptic\*.xml
 - Fix wrong file permissions in some ROMs
-
-v1.1.5
-- Fix ZN7android8String16aSEOS0 function not found in some ROMs
-- Add libutils.so as system_support
-- Abort installation if fail to mount mirror system
 
 ## Download Tutorial
 https://t.me/ryukinotes/97
@@ -97,6 +96,7 @@ Possibility of bootloop or even softbrick or a service failure on Read-Only ROM 
 
 ## Optionals
 - https://t.me/ryukinotes/8
+- https://t.me/ryukinotes/101
 - Global: https://t.me/ryukinotes/35
 - Stream: https://t.me/ryukinotes/52
 
@@ -111,9 +111,9 @@ Possibility of bootloop or even softbrick or a service failure on Read-Only ROM 
 
 ## Credits and Contributors
 - @HuskyDG
+- @HELLBOY017
 - https://t.me/viperatmos
 - https://t.me/androidryukimodsdiscussions
-- @HELLBOY017
 - https://t.me/androidappsportdevelopment
 
 ## Sponsors and Donation
