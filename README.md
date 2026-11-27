@@ -30,7 +30,7 @@ https://t.me/androidryukimodsdiscussions/51861
 
 ## Download Links and Changelog
 
-v1.2.5 https://github.com/reiryuki/Dolby-Atmos-OnePlus-8Visible-Magisk-Module
+v1.2.5 https://move2link.co/180e0a2
 - Add a new optional dolby.bass_freq to change bass-enhancer-cutoff-frequency values. Please read Optionals below.
 - Fix sepolicy denials in Android 17
 
